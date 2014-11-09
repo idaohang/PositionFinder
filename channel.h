@@ -1,4 +1,5 @@
-
+#ifndef CHANNEL_H
+#define CHANNEL_H
 #include <bitset>
 #include <vector>
 
@@ -122,4 +123,4 @@ std::vector<int> prnGen(int sat_num)
    return prn_code;
 }
 
-
+#endif
