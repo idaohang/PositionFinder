@@ -9,13 +9,17 @@ using namespace std;
 
 int main()
 {
-   ifstream inFile("GPS_fs16_3676E6-if4_1304E6_8bit_Real.bin", ios::in | ios::binary);
+   ifstream inFile("GPS_raw_data.txt");
 
    if(!inFile)
    {
       cerr << "the input file does not exist.\n";
       return -1;
    }
+
+   int x;
+   while(inFile>>x)
+      cout << x << endl;
    /*
    char buffer[1000];
 
@@ -45,7 +49,7 @@ int main()
       cout<<endl<<endl;
    }
 
-   channel::readData(inFile);
-   channel::dataShown();
+  // channel::readData(inFile);
+   // channel::dataShown();
    return 0;
 }
