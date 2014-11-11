@@ -1,34 +1,31 @@
 #include <iostream>
 #include <bitset>
 #include <vector>
+#include <cmath>
 #include "channel.h"
 
 
-const double channel::fs = 38.0e6;
-const double channel::fo = 8.9e6;
+const double channel::fs = 16.3676e6;
+const double channel::fo = 4.1304e6;
 
 std::vector<int> channel::raw_data{};
 
 void channel::dataShown() 
 {
    for(auto it = raw_data.begin(); it!=raw_data.end(); ++it)
-      //std::cout << (*it) << '\t'; 
-   std::cout << std::endl;
+      std::cout << (*it) << " "; 
 }
 
 
-void channel::readData(std::istream& in, size_t n)
+void channel::readData(std::istream& in)
 {
    raw_data.clear();
-   while(n!=0)
-   {
-      int tmp;
-      in >> tmp;
-      std::cout << tmp << '\t';
-      raw_data.push_back(tmp);
-      --n;
-   }
-
+   size_t n = int(ceil(fs*1.0e-3));
+   char *buffer = new char[n];
+   in.read(buffer,n);
+   for(int i = 0; i < n; ++i)
+      raw_data.push_back(int(buffer[i]));
+   delete [] buffer;
 }
 
 

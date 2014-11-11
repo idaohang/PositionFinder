@@ -16,7 +16,7 @@ int main()
       cerr << "the input file does not exist.\n";
       return -1;
    }
-   
+   /*
    char buffer[1000];
 
    inFile.read(buffer,1000);
@@ -25,8 +25,9 @@ int main()
    {
       cout <<int(buffer[i]) << " ";
    }
+   */
 
-   /*
+
    vector<channel> ch;
    for(int i=0; i<32; ++i)
    {
@@ -44,8 +45,7 @@ int main()
       cout<<endl<<endl;
    }
 
-   channel::readData(inFile, 10);
+   channel::readData(inFile);
    channel::dataShown();
-   */
    return 0;
 }

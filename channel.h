@@ -11,7 +11,7 @@ class channel
       enum Status{IDLE, ACQUISITION, PULL, TRACKING};
       channel(int chann_num):chann_id{chann_num},state{IDLE}{ prnGen(chann_num); }
       std::vector<int> prnSequence() { return prn; } 
-      static void readData(std::istream&, size_t);
+      static void readData(std::istream&);
       static void dataShown();
    private:
       static const double fs;
