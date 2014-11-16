@@ -1,36 +1,24 @@
 #include <iostream>
 #include <bitset>
 #include <vector>
+#include <cmath>
 #include <fstream>
 #include "channel.h"
-
+#include <fftw3.h>
 
 using namespace std;
 
 int main()
 {
+   const double fs =16.3676e6;
+   const double fo = 4.1304e6; 
+   const double pi = 3.14159; 
    ifstream inFile("GPS_raw_data.txt");
-
    if(!inFile)
    {
       cerr << "the input file does not exist.\n";
       return -1;
    }
-
-   int x;
-   while(inFile>>x)
-      cout << x << endl;
-   /*
-   char buffer[1000];
-
-   inFile.read(buffer,1000);
-
-   for(int i = 0; i < 1000; ++i)
-   {
-      cout <<int(buffer[i]) << " ";
-   }
-   */
-
 
    vector<channel> ch;
    for(int i=0; i<32; ++i)
@@ -38,18 +26,30 @@ int main()
       channel cur_ch(i+1);
       ch.push_back(cur_ch);
    }
-   for(auto i = 0; i<ch.size(); ++i)
+
+   size_t data_num = 10*16.3676e3;
+   cout << "data_num: " << data_num <<endl;
+   channel::readData(inFile, data_num);
+   channel::dataShown();
+
+
+   const int N = 163676;
+   fftw_complex in[N], out[N];
+   vector<double> vec = channel::ifData();
+   for(int i = 0; i!=N-1; ++i)
    {
-      vector<int> prnSeq = ch[i].prnSequence();
-      cout << i+1 << ": ";
-      for(auto it = prnSeq.begin(); it!=prnSeq.end(); ++it)
-      {
-         cout << *it;
-      }
-      cout<<endl<<endl;
+      in[i][0] = vec[i];
+      in[i][0] = in[i][0]*sin(2*pi*fs*i/fo);
    }
 
-  // channel::readData(inFile);
-   // channel::dataShown();
+   fftw_plan p;
+   p = fftw_plan_dft_1d(N, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
+   fftw_execute(p);
+   fftw_destroy_plan(p);
+
+   for(int i = 0; i<N; ++i)
+   {
+      cout << i << ": " << out[i][0] <<", " << out[i][1] <<endl;
+   }
    return 0;
 }

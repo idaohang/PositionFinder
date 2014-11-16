@@ -8,24 +8,32 @@
 const double channel::fs = 16.3676e6;
 const double channel::fo = 4.1304e6;
 
-std::vector<int> channel::raw_data{};
+std::vector<double> channel::raw_data{};
+
+
+std::vector<double> channel::ifData()
+{
+   return raw_data;
+}
 
 void channel::dataShown() 
 {
    for(auto it = raw_data.begin(); it!=raw_data.end(); ++it)
       std::cout << (*it) << " "; 
+   std::cout << std::endl;
 }
 
 
-void channel::readData(std::istream& in)
+void channel::readData(std::istream& in, size_t n)
 {
    raw_data.clear();
-   size_t n = int(ceil(fs*1.0e-3));
-   char *buffer = new char[n];
-   in.read(buffer,n);
-   for(int i = 0; i < n; ++i)
-      raw_data.push_back(int(buffer[i]));
-   delete [] buffer;
+   double x;
+   while(n!=0)
+   {
+      in >> x;
+      raw_data.push_back(x);
+      --n;
+   }
 }
 
 
