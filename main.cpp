@@ -24,28 +24,33 @@ int main()
    for(int i=0; i<32; ++i)
    {
       channel cur_ch(i+1);
+      cur_ch.prnGen(i+1);
       ch.push_back(cur_ch);
    }
 
    size_t data_num = 10*16.3676e3;
    cout << "data_num: " << data_num <<endl;
    channel::readData(inFile, data_num);
-   channel::dataShown();
-
+   //channel::dataShown();
 
    const int N = 163676;
    fftw_complex in[N], out[N];
    vector<double> vec = channel::ifData();
    for(int i = 0; i!=N-1; ++i)
    {
-      in[i][0] = vec[i];
-      in[i][0] = in[i][0]*sin(2*pi*fs*i/fo);
+      in[i][0] = vec[i]*cos(2*pi*fs*i/fo);
+      in[i][1] = vec[i]*sin(2*pi*fs*i/fo);
    }
 
    fftw_plan p;
    p = fftw_plan_dft_1d(N, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
    fftw_execute(p);
    fftw_destroy_plan(p);
+   fftw_complex cacode[N], cacode_out[N];
+   for(int i = 0; i<32; ++i)
+   {
+      vector<int> prn = ch[i].prnSequence();  
+   }
 
    for(int i = 0; i<N; ++i)
    {

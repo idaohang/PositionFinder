@@ -14,6 +14,7 @@ class channel
       static void readData(std::istream&, size_t);
       static void dataShown();
       static std::vector<double> ifData();
+      void prnGen(int sat_num);
    private:
       static const double fs;
       static const double fo;
@@ -21,6 +22,5 @@ class channel
       Status state;
       static std::vector<double> raw_data;
       std::vector<int> prn;
-      void prnGen(int sat_num);
 };
 #endif
